@@ -1,0 +1,9 @@
+# Modular Search Framework for Military Developers
+> [Tew En Hao](https://www.linkedin.com/in/en-hao-tew/), [Cheong Sik Feng](https://scholar.google.com.sg/citations?user=xoQuuC0AAAAJ&hl=en), [Aekas Singh Gulati](https://www.linkedin.com/in/aekas-singh-gulati-6b9360278/), [Dillion Lim](https://www.linkedin.com/in/dillion-lim), [Nicholas Lee Wei Jun](https://www.linkedin.com/in/lwj-nicholas/), Jaye Koh Bo Jay, [Aloysius Han Keng Siew](https://www.linkedin.com/in/aloysius-han-5a456a12/), **[Lim Yong Zhi](https://www.linkedin.com/in/limyz/)**
+
+This repository contains all relevant codes and materials prepared for our paper, _"Modular Search Framework for Military Developers"_, at the [2025 International Conference on Military Communication and Information Systems (ICMCIS)](https://icmcis.eu/).
+
+
+## 📜 Abstract
+Military developers often face unique challenges when searching for information due to the restrictive and specialized environments in which they operate. In recent years, Large Language Models (LLMs) have demonstrated exceptional capabilities in generating coherent, human-like text and answering complex queries across a range of natural language tasks. A modular architecture is ideal, where core LLM capabilities (e.g., code understanding, summarization, and retrieval) operate independently of the specific search engine. We propose a modular, adaptable information retrieval framework tailored for military use, which integrates LLMs as a core component and we developed a prototype based on our proposed framework and conducted a preliminary evaluation using a curated dataset. Our prototype achieved a recall of 95.94%. This modular and adaptable approach underscores the importance of integrating advanced information retrieval techniques in military contexts, paving the way for secure, efficient, and context-aware development processes.
+
