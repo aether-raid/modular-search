@@ -1,6 +1,11 @@
 # Modular Search Framework for Military Developers
 > [Tew En Hao](https://www.linkedin.com/in/en-hao-tew/), [Cheong Sik Feng](https://scholar.google.com.sg/citations?user=xoQuuC0AAAAJ&hl=en), [Aekas Singh Gulati](https://www.linkedin.com/in/aekas-singh-gulati-6b9360278/), [Dillion Lim](https://www.linkedin.com/in/dillion-lim), [Nicholas Lee Wei Jun](https://www.linkedin.com/in/lwj-nicholas/), Jaye Koh Bo Jay, [Aloysius Han Keng Siew](https://www.linkedin.com/in/aloysius-han-5a456a12/), **[Lim Yong Zhi](https://www.linkedin.com/in/limyz/)**
 
+[![PyPI Latest Release](https://img.shields.io/pypi/v/modular-search.svg?logo=python&logoColor=white&color=blue)](https://pypi.org/project/modular-search/)
+![GitHub Page Views Count](https://badges.toozhao.com/badges/01JW9DZB3MAEG11FXQP8EVDRAZ/blue.svg)
+<!-- [![GitHub Release Date](https://img.shields.io/github/release-date/aether-raid/modular-search?logo=github&label=latest%20release&color=blue)](https://github.com/aether-raid/modular-search/releases/latest) -->
+<!-- ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aether-raid/modular-search/docs.yml?label=PyPI%20Publish&color=blue) -->
+
 This repository contains all relevant codes and materials prepared for our paper, _"Modular Search Framework for Military Developers"_, at the [2025 International Conference on Military Communication and Information Systems (ICMCIS)](https://icmcis.eu/).
 
 
