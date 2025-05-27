@@ -16,3 +16,9 @@ class SearchEngine(ABC, Generic[O]):
         Each dictionary should contain at least: 'title', 'url', 'snippet' (optional).
         """
         pass
+    
+    def __call__(self, query: str) -> List[O]:
+        """
+        Allow the search engine to be called like a function.
+        """
+        return self.search(query)
