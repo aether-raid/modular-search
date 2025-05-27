@@ -1,5 +1,6 @@
 from enum import Enum
 from urllib.parse import urlparse
+# from concurrent.futures import ThreadPoolExecutor
 import requests
 
 from modular_search.blocks.core import UnitSearchBlock
@@ -37,10 +38,10 @@ class URLType(str, Enum):
     Enum for URL types.
     This can be used to classify URLs into different categories.
     """
-    CODEBASE = 'Codebase'
-    ARTICLE = 'Article'
-    FORUM = 'Forum'
-    USELESS = 'Useless'
+    CODEBASE = 'codebase'
+    ARTICLE = 'article'
+    FORUM = 'forum'
+    USELESS = 'useless'
 
 
 class CodebaseSearchBlock(UnitSearchBlock[str]):
@@ -101,6 +102,7 @@ class CodebaseSearchBlock(UnitSearchBlock[str]):
         forums = []
         
         for url in results:
+            # TODO: figure out if this should be here or in the search engine
             if not self.check_url_status(url):
                 continue
             classification = self.classify_url(url)
@@ -114,9 +116,23 @@ class CodebaseSearchBlock(UnitSearchBlock[str]):
                 continue
 
         # TODO: process and vectorize content
+        # processed_content = {
+        #     'articles': [],
+        #     'forums': []
+        # }
+        
+        # # Process articles and forums
+        # with ThreadPoolExecutor(max_workers=10) as executor:
+        #     futures = []
+        #     for url in articles:
+        #         futures.append(executor.submit(fetch_and_process_content, url, content_type, processed_content))
+            
+        #     for future in futures:
+        #         future.result()
+        
         
         # TODO: analyze chunks
         
         
         # Placeholder implementation; should be overridden by subclasses
-        return self.engine.search(query)
+        return results
