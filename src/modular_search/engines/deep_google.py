@@ -1,9 +1,8 @@
 from typing import List
 import re
-import requests
-from bs4 import BeautifulSoup
 
 from modular_search.engines.google import GoogleSearchEngine
+from modular_search.scraper import BS4Scraper
 
 
 class DeepGoogleSearchEngine(GoogleSearchEngine):
@@ -18,50 +17,17 @@ class DeepGoogleSearchEngine(GoogleSearchEngine):
         A Depth of 0 would mean no extended search, while a depth of 1 means to extract links from the first page.
         """
         super().__init__(num_results=num_results)
+        self.scraper = BS4Scraper()
         self.depth = depth
     
     def extended_search(self, url: str) -> List[str]:
         """
         Perform an extended search on a given URL to extract more links.
         This method should be implemented to scrape the content of the URL and extract links.
-        """  
-        
-        response = requests.get(url)
-        response.raise_for_status()  # Check if the request was successful
-        
-        # ensure the response has content
-        if not response.text:
-            return []
-        
-        content = str(response.text)
-        
-        # Determine the content type and parse accordingly
-        # Use html.parser for HTML content
-        # Use lxml for XML content
-        content_type = response.headers.get('Content-Type', '').lower()
-        parser = 'lxml-xml' if 'xml' in content_type else 'html.parser'
-        
-        # extract BeautifulSoup content based on the content type
-        soup = BeautifulSoup(content, parser)
-        
-        # Remove tags using BeautifulSoup
-        text = soup.get_text()
-        
-        # Basic text cleaning
-        text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces
-        text = re.sub(r'\n+', '\n', text)  # Replace multiple newlines
-        text = text.strip()
-        
-        # If the text is empty, return an empty list
-        if not text:
-            return []
-        
-        # Extracts all the links from the content.
-        links = []
-        
-        links = re.findall(r'(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', text)
-
-        return [str(link) for link in links]
+        """
+        text = self.scraper.extract_content(url)
+        links = self.scraper.extract_links(text)
+        return links
 
     def search(self, query: str) -> List[str]:
         results = super().search(query)
