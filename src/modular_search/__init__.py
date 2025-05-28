@@ -5,4 +5,4 @@ This is the modular-search package.
 It provides a framework for building modular search applications.
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
