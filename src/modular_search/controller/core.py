@@ -76,16 +76,17 @@ class SearchController(ABC, Generic[O]):
             unit_blocks = block_dict
         
         self.unit_blocks = unit_blocks
-    
+        
     @abstractmethod
-    def search(self, query: str) -> List[O]:
+    def select_blocks(self, query: str) -> List[str]:
+        """
+        Selects the unit search blocks to be used for the given query.
+        This method should be implemented by subclasses to define
+        how blocks are selected based on the query.
+        """
         pass
 
-    def internal_search(self, query: str, active_blocks: List[str]) -> Dict[str, List[O]]:
-        missing_blocks = set(active_blocks) - set(self.unit_blocks.keys())
-        if missing_blocks:
-            raise ValueError(f"Active blocks {missing_blocks} are not registered in the controller.")
-
+    def block_search(self, query: str, active_blocks: List[str]) -> Dict[str, List[O]]:
         # Dispatch to active Unit Search Blocks
         all_results = {}
         for block_name in active_blocks:
@@ -94,4 +95,21 @@ class SearchController(ABC, Generic[O]):
             all_results[block_name] = results
         
         return all_results
+    
+    @abstractmethod
+    def aggregate(self, search_results: Dict[str, List[O]]) -> List[O]:
+        pass
+    
+    def search(self, query: str) -> List[O]:
+        active_blocks = self.select_blocks(query)
+        
+        missing_blocks = set(active_blocks) - set(self.unit_blocks.keys())
+        if missing_blocks:
+            raise ValueError(f"Active blocks {missing_blocks} are not registered in the controller.")
+        
+        search_results = self.block_search(query, active_blocks)
+        
+        aggregated_results = self.aggregate(search_results)
+        
+        return aggregated_results
     

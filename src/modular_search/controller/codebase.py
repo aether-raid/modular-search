@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, Dict
 from modular_search.controller.core import SearchController
 from modular_search.blocks.codebase import CodebaseSearchBlock, CodebaseSearchResult
+
 
 class CodebaseSearchController(SearchController[CodebaseSearchResult]):
     """
@@ -12,7 +13,15 @@ class CodebaseSearchController(SearchController[CodebaseSearchResult]):
             "CodebaseSearchBlock": search_block
         })
     
-    def search(self, query: str) -> List[CodebaseSearchResult]:
-        # since it's just one block, it makes our life easier
-        all_results = super().internal_search(query, ["CodebaseSearchBlock"])
-        return all_results["CodebaseSearchBlock"]
+    def select_blocks(self, query: str) -> List[str]:
+        """
+        Selects the unit search blocks to be used for the given query.
+        For CodebaseSearchController, we always use the CodebaseSearchBlock.
+        """
+        return ["CodebaseSearchBlock"]
+    
+    def aggregate(self, search_results: Dict[str, List[CodebaseSearchResult]]) -> List[CodebaseSearchResult]:
+        """ Aggregates the search results from the CodebaseSearchBlock.
+        Since we only have one block, we can return the results directly.
+        """
+        return search_results["CodebaseSearchBlock"]
