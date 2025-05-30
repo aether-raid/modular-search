@@ -79,4 +79,37 @@ class BS4Scraper:
         links = re.findall(r'(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', text)
 
         return [str(link) for link in links]
+
+    def get_repo_content(self, url: str, max_files: int = 5) -> str:
+        """Extracts relevant content from a repository."""
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        response = requests.get(url, headers=headers, timeout=15)
+        soup = BeautifulSoup(response.text, 'html.parser')
         
+        content_summary = []
+        
+        # Get repository description
+        description = soup.find('p', {'class': 'f4 my-3'})
+        if description:
+            content_summary.append(f"Description: {description.get_text().strip()}")
+
+        # Get README content
+        readme = soup.find('article', {'class': 'markdown-body'})
+        if readme:
+            content_summary.append(f"README: {readme.get_text()[:1000]}")  # Limit README length
+
+        # Get code files
+        code_elements = soup.find_all(['pre', 'div'], class_=['highlight', 'blob-code'])
+        files_added = 0
+        for elem in code_elements:
+            if files_added >= max_files:
+                break
+            code = elem.get_text().strip()
+            if len(code) > 50:  # Skip very small snippets
+                content_summary.append(f"Code Sample {files_added + 1}:\n{code[:500]}")
+                files_added += 1
+
+        return "\n\n".join(content_summary)
+            
