@@ -1,6 +1,7 @@
 from typing import Any, List, Optional, Callable
 from pydantic import BaseModel
 
+from modular_search.llm import LLM
 from modular_search.scraper import BS4Scraper
 from modular_search.blocks.codebase import CodebaseSearchResult
 from modular_search.rerankers.core import Reranker
@@ -20,7 +21,7 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
     which repository best answers the user's question based on the content extracted.
     """
     
-    def __call__(self, llm: Callable[[str], str]) -> Any:
+    def __call__(self, llm: LLM) -> Any:
         self.llm = llm
         self.scraper = BS4Scraper()
     
