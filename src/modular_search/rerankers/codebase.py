@@ -1,5 +1,4 @@
-from typing import List, Optional
-from pydantic import BaseModel
+from typing import List
 
 from modular_search.llm import LLM
 from modular_search.scraper import BS4Scraper
@@ -7,10 +6,8 @@ from modular_search.blocks.codebase import CodebaseSearchResult
 from modular_search.rerankers.core import Reranker
 
 
-class CodebaseSearchRerankerResult(BaseModel):
-    best_candidate: Optional[str]
-    accuracy: float
-    # known_repo_content: str  # Uncomment if you want to return the known repository content
+class CodebaseSearchRerankerResult(CodebaseSearchResult):
+    accuracy: float = 0
 
 
 class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
@@ -28,8 +25,7 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
     def rerank(self,
                question: str,
                candidates: List[CodebaseSearchResult],
-               known_repos: List[str] = [],
-               max_candidates: int = 5) -> CodebaseSearchRerankerResult:
+               max_candidates: int = 5) -> List[CodebaseSearchRerankerResult]:
         """
         Reranks candidates based on their content relevance to the question.
         
@@ -43,8 +39,8 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
         - Dictionary with the best candidate link and its accuracy score (dict)
         """
 
-        if not candidates:
-            return CodebaseSearchRerankerResult(best_candidate=None, accuracy=0)
+        if not len(candidates) or max_candidates <= 0:
+            return []
 
         # Get content for top candidates
         candidates_with_content = []
@@ -54,28 +50,23 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
                 candidates_with_content.append({
                     'url': candidate.url,
                     'content': content,
-                    'occurrences': candidate.url
+                    'occurrences': candidate.occurrences
                 })
 
         if len(candidates_with_content) == 0:
-            return CodebaseSearchRerankerResult(best_candidate=None, accuracy=0)
-
-        # Prepare evaluation prompt
-        known_repo_content = self.scraper.get_repo_content(known_repos[0]) if known_repos else ""
-
-        # Continue evaluating other candidates if accuracy is low
+            return []
+        
+        results: list[CodebaseSearchRerankerResult] = []
         for candidate in candidates_with_content:
             evaluation_prompt = f"""
             Question: {question}
 
             Evaluate the following GitHub repository content to determine if it answers the question.
-            Use the known repository content as a reference model answer. Rate the candidate repository from 0-100 based on how well it answers the question. 
+            Rate the candidate repository from 0-100 based on how well it answers the question. 
             IMPORTANT: You must ONLY return a numeric score.
             RULES:
                 1. score MUST be a number (e.g. 75.50, 32.40, etc.)
                 2. DO NOT use text like "The rate is" or "out of 100" only the number and nothing else.
-                Known Repository Content:
-                    {known_repo_content}
     
                 Candidate Repository Content:
                     {candidates_with_content[0]['content']}
@@ -83,15 +74,11 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
 
             result = self.llm(evaluation_prompt)
             accuracy = float(result)
-
-            if accuracy >= 70:
-                print('best_candidate: ', candidate['url'], '\naccuracy: ', accuracy )
-                return CodebaseSearchRerankerResult(
-                    best_candidate=candidate.url,
-                    accuracy=accuracy
-                )
-
-        return CodebaseSearchRerankerResult(
-            best_candidate=candidates_with_content[0]['url'],
-            accuracy=0
-        )
+            
+            results.append(CodebaseSearchRerankerResult(
+                url=candidate['url'],
+                occurrences=candidate['occurrences'],
+                accuracy=accuracy
+            ))
+        
+        return sorted(results, key=lambda x: x.accuracy, reverse=True)[:max_candidates]
