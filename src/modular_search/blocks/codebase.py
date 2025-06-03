@@ -243,13 +243,13 @@ class CodebaseSearchBlock(UnitSearchBlock[CodebaseSearchResult]):
         
         results = self.engine.search(query)
         
-        codebases = set()
+        codebases = []
         articles_and_forums = []
         
         for url in results:
             classification = self.classify_url(url)
             if classification == URLType.CODEBASE:
-                codebases.add(url)
+                codebases.append(url)
             elif classification == URLType.ARTICLE:
                 articles_and_forums.append(url)
             elif classification == URLType.FORUM:
@@ -269,7 +269,7 @@ class CodebaseSearchBlock(UnitSearchBlock[CodebaseSearchResult]):
         results, codebase_links = self.get_top_links(similarities, all_chunks, metadata)
         
         counter = Counter()
-        for link in codebase_links:
+        for link in codebases+codebase_links:
             if not self.check_url_status(url):
                 continue
             counter[link] += 1
