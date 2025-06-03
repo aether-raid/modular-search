@@ -19,3 +19,9 @@ class Reranker(ABC, Generic[C, O]):
             List[C]: The reranked list of candidates.
         """
         pass
+
+    def __call__(self, query: str, candidates: List[C]) -> List[O]:
+        """
+        Allow the reranker to be called like a function.
+        """
+        return self.rerank(query, candidates)
