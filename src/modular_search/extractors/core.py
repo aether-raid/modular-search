@@ -7,6 +7,6 @@ O = TypeVar('O')
 
 class Extractor(ABC, Generic[R, O]):
     @abstractmethod
-    def extract(self, url: List[R]) -> List[O]:
+    def extract(self, candidates: List[R]) -> List[O]:
         pass
         

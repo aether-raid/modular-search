@@ -113,7 +113,7 @@ class BS4Scraper:
 
         return "\n\n".join(content_summary)
 
-    def extract_code_from_repo(self, url: str) -> list[str]:
+    def extract_code_from_repo(self, url: str) -> List[str]:
         """Extracts code from a repository URL."""
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
