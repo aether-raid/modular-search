@@ -1,6 +1,6 @@
 [project]
 name = "modular-search"
-version = "0.1.4"
+version = "0.1.5"
 description = "A Modular Search Framework for Military Developers"
 readme = "README.md"
 authors = [
