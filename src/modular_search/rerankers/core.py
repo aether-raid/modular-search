@@ -1,18 +1,21 @@
+from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 
 
 C = TypeVar('C')
+O = TypeVar('O')
 
-class Reranker(Generic[C]):
-    def rerank(self, query: str, candidates: List[C]) -> List[C]:
+class Reranker(ABC, Generic[C, O]):
+    @abstractmethod
+    def rerank(self, query: str, candidates: List[C]) -> List[O]:
         """
         Reranks the given candidates based on the query.
-        
+
         Args:
             query (str): The search query.
             candidates (List[C]): The list of candidate documents to rerank.
-        
+
         Returns:
             List[C]: The reranked list of candidates.
         """
-        return candidates
+        pass

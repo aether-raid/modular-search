@@ -10,30 +10,30 @@ class CodebaseSearchRerankerResult(CodebaseSearchResult):
     accuracy: float = 0
 
 
-class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
+class CodebaseSearchReranker(Reranker[CodebaseSearchResult, CodebaseSearchRerankerResult]):
     """
     Reranker for codebase search results using LLM to evaluate repository content.
-    
+
     This reranker fetches content from GitHub repositories and uses an LLM to evaluate
     which repository best answers the user's question based on the content extracted.
     """
-    
+
     def __init__(self, llm: LLM):
         self.llm = llm
         self.scraper = BS4Scraper()
-    
+
     def rerank(self,
-               question: str,
+               query: str,
                candidates: List[CodebaseSearchResult]) -> List[CodebaseSearchRerankerResult]:
         """
         Reranks candidates based on their content relevance to the question.
-        
+
         Arguments:
         - question: The original question (str)
         - candidates: List of candidate repository links with occurrence counts (list of dict)
         - known_repos: List of known correct repositories (list of str)
         - max_candidates: Maximum number of candidates to analyze (int)
-        
+
         Returns:
         - Dictionary with the best candidate link and its accuracy score (dict)
         """
@@ -54,30 +54,30 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
 
         if len(candidates_with_content) == 0:
             return []
-        
+
         results: list[CodebaseSearchRerankerResult] = []
         for candidate in candidates_with_content:
             evaluation_prompt = f"""
-            Question: {question}
+            Question: {query}
 
             Evaluate the following GitHub repository content to determine if it answers the question.
-            Rate the candidate repository from 0-100 based on how well it answers the question. 
+            Rate the candidate repository from 0-100 based on how well it answers the question.
             IMPORTANT: You must ONLY return a numeric score.
             RULES:
                 1. score MUST be a number (e.g. 75.50, 32.40, etc.)
                 2. DO NOT use text like "The rate is" or "out of 100" only the number and nothing else.
-    
+
             Candidate Repository Content:
             {candidates_with_content[0]['content']}
             """.strip()
 
             result = self.llm(evaluation_prompt)
             accuracy = float(result)
-            
+
             results.append(CodebaseSearchRerankerResult(
                 url=candidate['url'],
                 occurrences=candidate['occurrences'],
                 accuracy=accuracy
             ))
-        
+
         return sorted(results, key=lambda x: x.accuracy, reverse=True)
