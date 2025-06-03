@@ -24,8 +24,7 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
     
     def rerank(self,
                question: str,
-               candidates: List[CodebaseSearchResult],
-               max_candidates: int = 5) -> List[CodebaseSearchRerankerResult]:
+               candidates: List[CodebaseSearchResult]) -> List[CodebaseSearchRerankerResult]:
         """
         Reranks candidates based on their content relevance to the question.
         
@@ -39,12 +38,12 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
         - Dictionary with the best candidate link and its accuracy score (dict)
         """
 
-        if not len(candidates) or max_candidates <= 0:
+        if not len(candidates):
             return []
 
         # Get content for top candidates
         candidates_with_content = []
-        for candidate in candidates[:max_candidates]:
+        for candidate in candidates:
             content = self.scraper.get_repo_content(candidate.url)
             if content:
                 candidates_with_content.append({
@@ -68,9 +67,9 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
                 1. score MUST be a number (e.g. 75.50, 32.40, etc.)
                 2. DO NOT use text like "The rate is" or "out of 100" only the number and nothing else.
     
-                Candidate Repository Content:
-                    {candidates_with_content[0]['content']}
-                """
+            Candidate Repository Content:
+            {candidates_with_content[0]['content']}
+            """.strip()
 
             result = self.llm(evaluation_prompt)
             accuracy = float(result)
@@ -81,4 +80,4 @@ class CodebaseSearchReranker(Reranker[CodebaseSearchResult]):
                 accuracy=accuracy
             ))
         
-        return sorted(results, key=lambda x: x.accuracy, reverse=True)[:max_candidates]
+        return sorted(results, key=lambda x: x.accuracy, reverse=True)
