@@ -72,7 +72,7 @@ class CodebaseSearchBlock(UnitSearchBlock[CodebaseSearchResult]):
         Args:
             engine: An instance of a search engine that supports codebase searching.
         """
-        super().__init__(engine)
+        self.engine = engine
         self.scraper = BS4Scraper()
 
     def check_url_status(self, url: str, timeout: int = 15):
@@ -229,7 +229,7 @@ class CodebaseSearchBlock(UnitSearchBlock[CodebaseSearchResult]):
 
         return results, codebase_links
 
-    def search(self, query: str) -> list[CodebaseSearchResult]:
+    def search(self, query: str) -> List[CodebaseSearchResult]:
         """
         Perform a search in the codebase using the provided query.
         This method should be implemented to define specific search behavior for codebases.

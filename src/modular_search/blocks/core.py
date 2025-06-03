@@ -10,9 +10,6 @@ class UnitSearchBlock(ABC, Generic[O]):
     Abstract base class for all Unit Search Blocks.
     """
 
-    def __init__(self, engine: SearchEngine):
-        self.engine = engine
-    
     @abstractmethod
     def search(self, query: str) -> List[O]:
         """
@@ -20,7 +17,7 @@ class UnitSearchBlock(ABC, Generic[O]):
         This method should be implemented by subclasses to define specific search behavior.
         """
         pass
-    
+
     def __call__(self, query: str) -> List[O]:
         """
         Allow the search block to be called like a function.
