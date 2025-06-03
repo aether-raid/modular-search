@@ -1,5 +1,4 @@
 from typing import List
-from modular_search.llm import LLM
 from modular_search.scraper import BS4Scraper
 from modular_search.extractors.core import Extractor
 from modular_search.blocks.codebase import CodebaseSearchResult
@@ -9,11 +8,10 @@ from modular_search.rerankers.codebase import CodebaseSearchRerankerResult
 class CodebaseSearchExtractorResult(CodebaseSearchRerankerResult):
     code_blocks: List[str]
 
-class CodebaseSearchExtractor(Extractor[CodebaseSearchResult, CodebaseSearchExtractorResult]):    
-    def __init__(self, llm: LLM):
-        self.llm = llm
+class CodebaseSearchExtractor(Extractor[CodebaseSearchResult, CodebaseSearchExtractorResult]):
+    def __init__(self):
         self.scraper = BS4Scraper()
-    
+
     def extract(self, candidates: List[CodebaseSearchResult]) -> List[CodebaseSearchExtractorResult]:
         results = []
         for candidate in candidates:
