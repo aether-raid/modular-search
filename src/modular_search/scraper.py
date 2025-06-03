@@ -112,4 +112,30 @@ class BS4Scraper:
                 files_added += 1
 
         return "\n\n".join(content_summary)
+
+    def extract_code_from_repo(self, url: str) -> list[str]:
+        """Extracts code from a repository URL."""
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        }
+        response = requests.get(url, headers=headers, timeout=15)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        code_blocks = []
+        
+        # Find code elements
+        if 'github.com' in url.lower():
+            # GitHub specific extraction
+            code_elements = soup.find_all(['pre', 'div'], class_=['highlight', 'highlight-source', 'blob-code', 'js-file-line'])
+        else:
+            # Generic code extraction
+            code_elements = soup.find_all(['pre', 'code', 'div'], class_=['code', 'snippet', 'source'])
             
+        for element in code_elements:
+            code = element.get_text().strip()
+            if len(code) > 50:  # Filter out small snippets
+                code_blocks.append(code)
+        
+        return code_blocks
+
