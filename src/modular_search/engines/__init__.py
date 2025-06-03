@@ -1,3 +1,5 @@
+# src/modular_search/engines/__init__.py
+
 from modular_search.engines.core import SearchEngine
 from modular_search.engines.google import GoogleSearchEngine
 from modular_search.engines.deep_google import DeepGoogleSearchEngine
