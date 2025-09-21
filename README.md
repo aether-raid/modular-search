@@ -2,7 +2,7 @@
 > [Tew En Hao](https://www.linkedin.com/in/en-hao-tew/), [Cheong Sik Feng](https://scholar.google.com.sg/citations?user=xoQuuC0AAAAJ&hl=en), [Aekas Singh Gulati](https://www.linkedin.com/in/aekas-singh-gulati-6b9360278/), [Dillion Lim](https://www.linkedin.com/in/dillion-lim), [Nicholas Lee Wei Jun](https://www.linkedin.com/in/lwj-nicholas/), Jaye Koh Bo Jay, [Aloysius Han Keng Siew](https://www.linkedin.com/in/aloysius-han-5a456a12/), **[Lim Yong Zhi](https://www.linkedin.com/in/limyz/)**
 
 [![PyPI Latest Release](https://img.shields.io/pypi/v/modular-search.svg?logo=python&logoColor=white&color=blue)](https://pypi.org/project/modular-search/)
-![GitHub Page Views Count](https://badges.toozhao.com/badges/01JW9DZB3MAEG11FXQP8EVDRAZ/blue.svg)
+<!--![GitHub Page Views Count](https://badges.toozhao.com/badges/01JW9DZB3MAEG11FXQP8EVDRAZ/blue.svg)-->
 [![GitHub Release Date](https://img.shields.io/github/release-date/aether-raid/modular-search?logo=github&label=latest%20release&color=blue)](https://github.com/aether-raid/modular-search/releases/latest)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aether-raid/modular-search/python-publish.yml?label=PyPI%20Publish&color=blue)
 
@@ -208,7 +208,7 @@ for result in results:
 
 Notably, the `CodebaseSearchController` only has one block.
 
-## Rerankers & Extractors
+### Rerankers & Extractors
 
 In information retrieval, results re-ranking is a critical post-processing step aimed at improving the relevance and accuracy of search results. By reorganizing the retrieved results, re-ranking ensures that the most pertinent information is prioritized, enabling developers to access the most relevant insights quickly and efficiently. This process is particularly valuable in contexts where the quality and order of information significantly impact decision-making, such as military operations.
 
@@ -294,7 +294,7 @@ for result in extracted_results:
     print(result.url, result.occurrences, result.accuracy, result.code_blocks)
 ```
 
-## Putting it all Together
+### Putting it all Together
 
 We define our own flow for Codebase Search, which you can find below:
 
@@ -332,11 +332,18 @@ for result in extracted_results:
 
 This should provide a well-supported list of codebase links.
 
-<!-- ## 🖊️ Citing Modular Search
+## 🖊️ Citing Modular Search
 
 ```bibtex
-
-``` -->
+@inproceedings{tew2025modular,
+  title={Modular Search Framework for Military Developers},
+  author={Tew, En Hao and Cheong, Sik Feng and Gulati, Aekas Singh and Lim, Dillion and Jun, Nicholas Lee Wei and Jay, Jaye Koh Bo and Han, Aloysius Keng Siew and Lim, Yong Zhi},
+  booktitle={2025 International Conference on Military Communication and Information Systems (ICMCIS)},
+  pages={1--10},
+  year={2025},
+  organization={IEEE}
+}
+```
 
 <p align="center">
 <a href="https://star-history.com/#aether-raid/modular-search">
